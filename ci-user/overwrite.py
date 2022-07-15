@@ -22,7 +22,10 @@ elif chapter <= 8:
 lines = []
 with open("../os/Cargo.toml", 'r') as f:
     for line in f.readlines():
-        processed = line.replace(' git = "https://github.com/rcore-os/riscv"', ' path = "../ci-user/riscv" ')
+        # 此行 改为下面的
+        processed = line
+        # processed = line.replace(' git = "https://gitee.com/rcore-os/riscv"', ' path = "../ci-user/riscv" ')
         lines.append(processed)
 with open("../os/Cargo.toml", 'w+') as f:
     f.writelines(lines)
+    

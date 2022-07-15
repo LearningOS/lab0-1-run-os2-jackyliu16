@@ -2,8 +2,10 @@ use riscv::register::sstatus::{self, Sstatus, SPP};
 
 #[repr(C)]
 pub struct TrapContext {
+    // we will save all register when we trap
     pub x: [usize; 32],
     pub sstatus: Sstatus,
+    // TODO last i-addr  
     pub sepc: usize,
 }
 

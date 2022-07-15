@@ -10,9 +10,11 @@
     .globl __restore
     .align 2
 __alltraps:
-    csrrw sp, sscratch, sp
-    # now sp->kernel stack, sscratch->user stack
+    # before csrrw: sscratch->kernel stack, sp->user kernel
+    csrrw sp, sscratch, sp # sscratch->sp, sp->sscratch
+    # now sp->kernel stack, sscratch->user stack (swap value)
     # allocate a TrapContext on kernel stack
+    # sp grows from tail to head.
     addi sp, sp, -34*8
     # save general-purpose registers
     sd x1, 1*8(sp)
@@ -21,13 +23,13 @@ __alltraps:
     # skip tp(x4), application does not use it
     # save x5~x31
     .set n, 5
-    .rept 27
-        SAVE_GP %n
+    .rept 27            # repeat 27 times
+        SAVE_GP %n      # sd xn n*8(sp) 
         .set n, n+1
     .endr
     # we can use t0/t1/t2 freely, because they were saved on kernel stack
-    csrr t0, sstatus
-    csrr t1, sepc
+    csrr t0, sstatus    # sstatus stores original running level
+    csrr t1, sepc       # sepc stores last i-addr
     sd t0, 32*8(sp)
     sd t1, 33*8(sp)
     # read user stack from sscratch and save it on the kernel stack

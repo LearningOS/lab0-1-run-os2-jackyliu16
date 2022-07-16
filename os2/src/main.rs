@@ -16,8 +16,10 @@ mod syscall;
 mod trap;
 
 core::arch::global_asm!(include_str!("entry.asm"));
+// linked application's Binary image file infor kernel
 core::arch::global_asm!(include_str!("link_app.S"));
 
+// we should clear bss before we run the programme, which is because we save things in bss ( global static variable ) it should be empty before we use
 fn clear_bss() {
     extern "C" {
         fn sbss();
@@ -31,10 +33,10 @@ fn clear_bss() {
 
 #[no_mangle]
 pub fn rust_main() -> ! {
-    clear_bss();
-    logging::init();
+    clear_bss();                // clear bss semgerment
+    logging::init();                    
     println!("[kernel] Hello, world!");
-    trap::init();
-    batch::init();
-    batch::run_next_app();
+    trap::init();               // start trap
+    batch::init();              // 
+    batch::run_next_app();      // 
 }

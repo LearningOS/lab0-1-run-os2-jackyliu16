@@ -64,6 +64,7 @@ impl AppManager {
         }
     }
 
+    // load application's binary image file inside the area which start with 0x80400000 ( we put all application here and clear then went we change )
     unsafe fn load_app(&self, app_id: usize) {
         if app_id >= self.num_app {
             panic!("All applications completed!");
@@ -71,7 +72,7 @@ impl AppManager {
         info!("[kernel] Loading app_{}", app_id);
         // clear icache
         // we need to clear instruction-cache 
-        //  to allow running next app properly.  
+        // to allow running next app properly.  
         core::arch::asm!("fence.i");
         // clear app area, set data from APP_BASE_ADDRESS.. to 0
         core::slice::from_raw_parts_mut(APP_BASE_ADDRESS as *mut u8, APP_SIZE_LIMIT).fill(0);

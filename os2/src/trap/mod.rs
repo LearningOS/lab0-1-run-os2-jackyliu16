@@ -7,7 +7,13 @@ use riscv::register::{
     scause::{self, Exception, Trap},
     stval, stvec,
 };
+// trap process flow:
+    // __alltrap : save everything inside the The kernel stack 
+    // change to trap_handler and finish trap distribute and dispose
+    // __restore:   recover register from the `trap_context` save in kernel stack 
 
+    
+// insert __alltraps and __restore inside the module 
 core::arch::global_asm!(include_str!("trap.S"));
 
 pub fn init() {

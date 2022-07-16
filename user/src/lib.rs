@@ -45,7 +45,7 @@ fn clear_bss() {
 }
 
 #[no_mangle]
-#[link_section = ".text.entry"]
+#[link_section = ".text.entry"]     // putting text inside .text.entry seg 
 pub extern "C" fn _start(argc: usize, argv: usize) -> ! {
     clear_bss();
     unsafe {
@@ -69,7 +69,7 @@ pub extern "C" fn _start(argc: usize, argv: usize) -> ! {
     exit(main(argc, v.as_slice()));
 }
 
-#[linkage = "weak"]
+#[linkage = "weak"]             // weak means that it will only use if use application haven't a kind a main function
 #[no_mangle]
 fn main(_argc: usize, _argv: &[&str]) -> i32 {
     panic!("Cannot find main!");

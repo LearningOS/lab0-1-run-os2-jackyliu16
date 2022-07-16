@@ -1,3 +1,4 @@
+// create a kind of link_app to linked everythings inside the kneral ( being call by main.rs )
 use std::fs::{read_dir, File};
 use std::io::{Result, Write};
 
